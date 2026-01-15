@@ -56,6 +56,7 @@ def dashboard(
     patients_offset: int = 0,
     alerts_limit: int = 20,
     alerts_offset: int = 0,
+    hours: int = 24,
     db: Session = Depends(get_db),
     user=Depends(get_current_user),
 ):
@@ -67,6 +68,7 @@ def dashboard(
         patients_offset,
         alerts_limit,
         alerts_offset,
+        hours,
     )
     return data
 

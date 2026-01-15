@@ -16,6 +16,7 @@ export function clearToken() {
 
 export function setHospitalId(hospitalId) {
   localStorage.setItem(HOSPITAL_KEY, hospitalId);
+  window.dispatchEvent(new Event("cah-hospital-change"));
 }
 
 export function getHospitalId() {
@@ -24,4 +25,5 @@ export function getHospitalId() {
 
 export function clearHospitalId() {
   localStorage.removeItem(HOSPITAL_KEY);
+  window.dispatchEvent(new Event("cah-hospital-change"));
 }

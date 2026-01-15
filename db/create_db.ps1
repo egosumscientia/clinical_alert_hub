@@ -242,8 +242,8 @@ ins_patients AS (
         h.hospital_id,
         'CH-' || h.idx || '-' || p.idx,
         CASE
-            WHEN p.idx % 15 = 0 THEN 'critical'
-            WHEN p.idx % 7 = 0 THEN 'warning'
+            WHEN p.idx % (10 + h.idx) = 0 THEN 'critical'
+            WHEN p.idx % (5 + (h.idx % 3)) = 0 THEN 'warning'
             ELSE 'normal'
         END,
         now() - (p.idx || ' hours')::interval

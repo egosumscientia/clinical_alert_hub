@@ -36,7 +36,14 @@ def evaluate_status(metric_type: str, metric_value: float) -> tuple[str, str]:
     return "normal", f"{metric_type} within expected range"
 
 
-def ingest_metric(db: Session, patient: Patient, metric_type: str, metric_value: float, measured_at: datetime):
+def ingest_metric(
+    db: Session,
+    patient: Patient,
+    metric_type: str,
+    metric_value: float,
+    measured_at: datetime,
+    commit: bool = True,
+):
     metric = ClinicalMetric(
         patient_id=patient.patient_id,
         metric_type=metric_type,
@@ -85,6 +92,9 @@ def ingest_metric(db: Session, patient: Patient, metric_type: str, metric_value:
                     )
                 )
 
-    db.commit()
-    db.refresh(patient)
+    if commit:
+        db.commit()
+        db.refresh(patient)
+    else:
+        db.flush()
     return metric

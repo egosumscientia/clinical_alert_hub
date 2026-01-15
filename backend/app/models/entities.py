@@ -59,7 +59,7 @@ class Patient(Base):
     __tablename__ = "patient"
 
     patient_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    hospital_id = Column(UUID(as_uuid=True), ForeignKey("clinical_alert_hub.hospital.hospital_id"), nullable=False)
+    hospital_id = Column(UUID(as_uuid=True), ForeignKey("clinical_alert_hub.hospital.hospital_id"), nullable=False, index=True)
     external_ref = Column(String(100), nullable=False)
     current_status = Column(String(20), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -91,11 +91,11 @@ class Alert(Base):
     __tablename__ = "alert"
 
     alert_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    patient_id = Column(UUID(as_uuid=True), ForeignKey("clinical_alert_hub.patient.patient_id"), nullable=False)
+    patient_id = Column(UUID(as_uuid=True), ForeignKey("clinical_alert_hub.patient.patient_id"), nullable=False, index=True)
     severity = Column(String(20), nullable=False)
     reason = Column(Text, nullable=False)
     is_acknowledged = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
 
 
 class AlertRecipient(Base):

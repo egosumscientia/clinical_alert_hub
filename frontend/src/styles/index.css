@@ -197,6 +197,72 @@ body {
   font-size: 15px;
 }
 
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel-header .panel-title {
+  margin-bottom: 0;
+}
+
+.alert-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filter-button.active {
+  color: var(--text-main);
+  border-color: color-mix(in srgb, var(--status-critical) 40%, var(--border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--status-critical) 18%, transparent);
+}
+
+.connection-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.connection-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--status-warning);
+}
+
+.connection-indicator.online {
+  background: var(--status-normal);
+}
+
+.connection-indicator.offline {
+  background: var(--status-critical);
+}
+
+.connection-text {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.connection-detail {
+  color: var(--status-critical);
+}
+
 .table-wrapper {
   overflow-x: auto;
 }
@@ -263,6 +329,11 @@ body {
   opacity: 0.75;
 }
 
+.alert-row.blink-critical {
+  border-color: color-mix(in srgb, var(--status-critical) 60%, var(--border));
+  animation: criticalPulse 1.1s ease-in-out infinite;
+}
+
 .alert-reason {
   font-weight: 500;
   margin-bottom: 4px;
@@ -304,6 +375,18 @@ body {
 .alert-note {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+@keyframes criticalPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(242, 107, 91, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(242, 107, 91, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(242, 107, 91, 0.25);
+  }
 }
 
 .pagination {

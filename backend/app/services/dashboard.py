@@ -4,6 +4,9 @@ from sqlalchemy.orm import Session
 from app.models.entities import Patient, Alert
 
 
+from datetime import datetime, timedelta, timezone
+import time
+
 def get_dashboard(
     db: Session,
     hospital_id,
@@ -11,7 +14,11 @@ def get_dashboard(
     patients_offset: int,
     alerts_limit: int,
     alerts_offset: int,
+    hours: int = 24,
 ):
+    start_time = time.time()
+    cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
+    
     status_priority = case(
         (Patient.current_status == "critical", 3),
         (Patient.current_status == "warning", 2),
@@ -30,7 +37,10 @@ def get_dashboard(
     alerts_query = (
         db.query(Alert)
         .join(Patient, Alert.patient_id == Patient.patient_id)
-        .filter(Patient.hospital_id == hospital_id)
+        .filter(
+            Patient.hospital_id == hospital_id,
+            Alert.created_at >= cutoff_time
+        )
     )
     alerts = (
         alerts_query
@@ -50,6 +60,7 @@ def get_dashboard(
         .one()
     )
 
+    print(f"Dashboard query took: {time.time() - start_time:.4f}s")
     return {
         "totals": {
             "critical": totals.critical or 0,

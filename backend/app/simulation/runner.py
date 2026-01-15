@@ -104,22 +104,35 @@ def choose_status_cycle(current_status: str) -> str:
         return "normal"
 
 
+def run_simulation_step():
+    db = SessionLocal()
+    try:
+        ensure_seeded(db)
+        patients = db.query(Patient).all()
+        for patient in patients:
+            next_bias = choose_status_cycle(patient.current_status)
+            metric_type = random.choice(METRIC_TYPES)
+            value = random_metric_value(metric_type, next_bias)
+            ingest_metric(
+                db,
+                patient,
+                metric_type,
+                value,
+                datetime.now(timezone.utc),
+                commit=False,
+            )
+        db.commit()
+    except Exception as exc:
+        print(f"Simulation loop error: {exc}")
+    finally:
+        db.close()
+
+
 async def simulation_loop():
+    loop = asyncio.get_running_loop()
     while True:
         await asyncio.sleep(config.SIMULATION_INTERVAL_SECONDS)
-        db = SessionLocal()
-        try:
-            ensure_seeded(db)
-            patients = db.query(Patient).all()
-            for patient in patients:
-                next_bias = choose_status_cycle(patient.current_status)
-                metric_type = random.choice(METRIC_TYPES)
-                value = random_metric_value(metric_type, next_bias)
-                ingest_metric(db, patient, metric_type, value, datetime.now(timezone.utc))
-        except Exception as exc:
-            print(f"Simulation loop error: {exc}")
-        finally:
-            db.close()
+        await loop.run_in_executor(None, run_simulation_step)
 
 
 async def start_simulation_if_enabled():
