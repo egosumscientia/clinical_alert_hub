@@ -335,7 +335,10 @@ export default function Dashboard() {
                 <span className={`status-pill ${String(alert.severity).toLowerCase()}`}>
                   {severityLabel(alert.severity)}
                 </span>
-                <Link className="alert-button" to={`/patients/${alert.patient_id}`}>
+                <Link
+                  className="alert-button"
+                  to={`/patients/${alert.patient_id}?alert_severity=${encodeURIComponent(alert.severity || "")}`}
+                >
                   Ver
                 </Link>
                 {alert.is_acknowledged ? (
