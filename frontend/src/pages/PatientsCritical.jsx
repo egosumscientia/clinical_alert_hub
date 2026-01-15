@@ -30,7 +30,7 @@ export default function PatientsCritical() {
       })
       .catch((err) => {
         if (active) {
-          setError(err.message || "Failed to load patients");
+          setError(err.message || "No se pudieron cargar los pacientes");
         }
       });
 
@@ -45,7 +45,7 @@ export default function PatientsCritical() {
 
   return (
     <div className="panel">
-      <div className="panel-title">Critical Patients</div>
+      <div className="panel-title">Pacientes críticos</div>
       <PatientsTable patients={patients.items} />
       <PaginationControls
         total={patients.page.total}

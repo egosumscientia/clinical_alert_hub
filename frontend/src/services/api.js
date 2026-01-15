@@ -20,7 +20,7 @@ export async function apiRequest(path, options = {}) {
     });
   } catch (error) {
     if (error.name === "AbortError") {
-      throw new Error("Request timed out. Please check your connection.");
+      throw new Error("La solicitud agotó el tiempo. Revisa tu conexión.");
     }
     throw error;
   } finally {
@@ -34,12 +34,12 @@ export async function apiRequest(path, options = {}) {
       window.location.replace("/login");
     }
     const message = await response.text();
-    throw new Error(message || "Unauthorized");
+    throw new Error(message || "No autorizado");
   }
 
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message || "Request failed");
+    throw new Error(message || "Error en la solicitud");
   }
 
   return response.json();

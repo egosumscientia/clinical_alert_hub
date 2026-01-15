@@ -25,7 +25,7 @@ export default function Header() {
       })
       .catch((err) => {
         if (active) {
-          setError(err.message || "Failed to load hospitals");
+          setError(err.message || "No se pudieron cargar los hospitales");
         }
       });
 
@@ -43,10 +43,10 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="header-title">Live Clinical Overview</div>
+      <div className="header-title">Resumen clínico en vivo</div>
       <div className="header-filters">
         {error ? (
-          <div className="filter-pill">Hospital unavailable</div>
+          <div className="filter-pill">Hospital no disponible</div>
         ) : hospitals.length > 1 ? (
           <label className="filter-select">
             <span>Hospital</span>
@@ -60,10 +60,10 @@ export default function Header() {
           </label>
         ) : (
           <div className="filter-pill">
-            Hospital: {hospitals[0] ? hospitals[0].name : "Loading..."}
+            Hospital: {hospitals[0] ? hospitals[0].name : "Cargando..."}
           </div>
         )}
-        <div className="filter-pill">Last 24h</div>
+        <div className="filter-pill">Últimas 24 h</div>
       </div>
     </header>
   );

@@ -22,11 +22,11 @@ export default function PaginationControls({
   return (
     <div className="pagination">
       <div className="pagination-info">
-        Showing {start}-{end} of {total}
+        Mostrando {start}-{end} de {total}
       </div>
       <div className="pagination-controls">
         <label className="pagination-size">
-          Rows
+          Filas
           <select value={safeLimit} onChange={(event) => onLimitChange(Number(event.target.value))}>
             {PAGE_SIZES.map((size) => (
               <option key={size} value={size}>
@@ -36,7 +36,7 @@ export default function PaginationControls({
           </select>
         </label>
         <button className="page-button" type="button" onClick={goPrev} disabled={currentPage <= 1}>
-          Prev
+          Anterior
         </button>
         <span className="page-status">
           {currentPage} / {totalPages}
@@ -47,7 +47,7 @@ export default function PaginationControls({
           onClick={goNext}
           disabled={currentPage >= totalPages}
         >
-          Next
+          Siguiente
         </button>
       </div>
     </div>

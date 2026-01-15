@@ -187,12 +187,47 @@ export default function Dashboard() {
     });
   }, [alerts, alertFilter]);
 
+  const severityLabel = (severity) => {
+    const value = String(severity || "").toLowerCase();
+    if (value === "critical") return "Crítico";
+    if (value === "warning") return "Advertencia";
+    if (value === "normal") return "Normal";
+    return severity;
+  };
+
+  const reasonLabel = (reason) => {
+    const value = String(reason || "");
+    const map = {
+      "Heart rate exceeds 120": "Frecuencia cardíaca supera 120",
+      "Heart rate exceeds 100": "Frecuencia cardíaca supera 100",
+      "Heart rate within normal range": "Frecuencia cardíaca dentro del rango normal",
+      "SpO2 at or below 90": "SpO₂ menor o igual a 90",
+      "SpO2 below 95": "SpO₂ por debajo de 95",
+      "SpO2 within normal range": "SpO₂ dentro del rango normal",
+      "Respiratory rate exceeds 30": "Frecuencia respiratoria supera 30",
+      "Respiratory rate exceeds 22": "Frecuencia respiratoria supera 22",
+      "Respiratory rate within normal range": "Frecuencia respiratoria dentro del rango normal",
+    };
+    if (map[value]) {
+      return map[value];
+    }
+    const outsideMatch = value.match(/^(.+) outside expected range$/);
+    if (outsideMatch) {
+      return `${outsideMatch[1]} fuera del rango esperado`;
+    }
+    const withinMatch = value.match(/^(.+) within expected range$/);
+    if (withinMatch) {
+      return `${withinMatch[1]} dentro del rango esperado`;
+    }
+    return reason;
+  };
+
   if (error) {
     return <div className="panel">{error}</div>;
   }
 
   if (!data) {
-    return <div className="panel">Loading dashboard...</div>;
+    return <div className="panel">Cargando panel...</div>;
   }
 
   const handleAcknowledge = async (alertId) => {
@@ -206,15 +241,18 @@ export default function Dashboard() {
         }
         return {
           ...prev,
-          alerts: prev.alerts.map((alert) =>
-            alert.alert_id === alertId
-              ? { ...alert, is_acknowledged: response.is_acknowledged }
-              : alert
-          )
+          alerts: {
+            ...prev.alerts,
+            items: prev.alerts.items.map((alert) =>
+              alert.alert_id === alertId
+                ? { ...alert, is_acknowledged: response.is_acknowledged }
+                : alert
+            ),
+          }
         };
       });
     } catch (err) {
-      setActionError(err.message || "Failed to acknowledge alert");
+      setActionError(err.message || "No se pudo reconocer la alerta");
     } finally {
       setAcknowledging((prev) => ({ ...prev, [alertId]: false }));
     }
@@ -223,8 +261,8 @@ export default function Dashboard() {
   return (
     <div className="stack">
       <div className="stats-grid">
-        <StatCard label="Critical" value={data.totals.critical} tone="critical" />
-        <StatCard label="Warning" value={data.totals.warning} tone="warning" />
+        <StatCard label="Críticos" value={data.totals.critical} tone="critical" />
+        <StatCard label="Advertencia" value={data.totals.warning} tone="warning" />
         <StatCard label="Normal" value={data.totals.normal} tone="normal" />
       </div>
 
@@ -235,7 +273,7 @@ export default function Dashboard() {
       </div>
 
       <div className="panel">
-        <div className="panel-title">Patients Overview</div>
+        <div className="panel-title">Resumen de pacientes</div>
         <PatientsTable patients={data.patients.items} />
         <PaginationControls
           total={data.patients.page.total}
@@ -252,7 +290,7 @@ export default function Dashboard() {
 
       <div className="panel">
         <div className="panel-header">
-          <div className="panel-title">Recent Alerts</div>
+          <div className="panel-title">Alertas recientes</div>
           <div className="alert-filters">
             <button
               type="button"
@@ -273,7 +311,7 @@ export default function Dashboard() {
               className={`filter-button ${alertFilter === "unacknowledged" ? "active" : ""}`}
               onClick={() => setAlertFilter("unacknowledged")}
             >
-              Sin Atender
+              Sin atender
             </button>
           </div>
         </div>
@@ -288,20 +326,20 @@ export default function Dashboard() {
                 }`}
             >
               <div>
-                <div className="alert-reason">{alert.reason}</div>
+                <div className="alert-reason">{reasonLabel(alert.reason)}</div>
                 <div className="alert-meta">
-                  Patient {alert.patient_id.slice(0, 8)} - {new Date(alert.created_at).toLocaleString()}
+                  Paciente {alert.patient_id.slice(0, 8)} - {new Date(alert.created_at).toLocaleString()}
                 </div>
               </div>
               <div className="alert-actions">
                 <span className={`status-pill ${String(alert.severity).toLowerCase()}`}>
-                  {alert.severity}
+                  {severityLabel(alert.severity)}
                 </span>
                 <Link className="alert-button" to={`/patients/${alert.patient_id}`}>
-                  View
+                  Ver
                 </Link>
                 {alert.is_acknowledged ? (
-                  <span className="alert-note">Acknowledged</span>
+                  <span className="alert-note">Atendida</span>
                 ) : (
                   <button
                     className="alert-button primary"
@@ -309,7 +347,7 @@ export default function Dashboard() {
                     disabled={Boolean(acknowledging[alert.alert_id])}
                     onClick={() => handleAcknowledge(alert.alert_id)}
                   >
-                    {acknowledging[alert.alert_id] ? "Acknowledging..." : "Acknowledge"}
+                    {acknowledging[alert.alert_id] ? "Atendiendo..." : "Atender"}
                   </button>
                 )}
               </div>
@@ -331,3 +369,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

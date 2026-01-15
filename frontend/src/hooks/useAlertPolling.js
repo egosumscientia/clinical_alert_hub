@@ -44,7 +44,7 @@ export default function useAlertPolling({
         }
         didTimeout = true;
         setConnected(false);
-        setError("Backend timeout");
+        setError("Tiempo de espera del backend");
         setLoading(false);
         inFlightRef.current = false;
       }, timeoutMs);
@@ -73,7 +73,7 @@ export default function useAlertPolling({
           return;
         }
         setConnected(false);
-        setError(err?.message || "Polling failed");
+        setError(err?.message || "Error al actualizar");
         setLoading(false);
       } finally {
         if (!didTimeout) {

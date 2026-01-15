@@ -19,19 +19,19 @@ export default function AppLayout() {
           <span className="brand-mark">CAH</span>
           <div>
             <div className="brand-title">Clinical Alert Hub</div>
-            <div className="brand-subtitle">Monitoring</div>
+            <div className="brand-subtitle">Monitoreo</div>
           </div>
         </div>
         <nav className="nav">
           <NavLink to="/" end className="nav-link">
-            Dashboard
+            Panel
           </NavLink>
           <NavLink to="/patients/critical" className="nav-link">
-            Critical Patients
+            Pacientes críticos
           </NavLink>
         </nav>
         <button className="button ghost" onClick={handleLogout}>
-          Sign out
+          Cerrar sesión
         </button>
       </aside>
       <div className="main">

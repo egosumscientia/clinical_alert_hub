@@ -18,7 +18,7 @@ export default function Login() {
       setToken(data.access_token);
       navigate("/");
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError(err.message || "No se pudo iniciar sesión");
     } finally {
       setLoading(false);
     }
@@ -28,10 +28,10 @@ export default function Login() {
     <div className="auth-shell">
       <div className="auth-card">
         <h1>Clinical Alert Hub</h1>
-        <p className="auth-subtitle">Sign in to monitor critical patients.</p>
+        <p className="auth-subtitle">Inicia sesión para monitorear pacientes críticos.</p>
         <form onSubmit={handleSubmit} className="auth-form">
           <label>
-            Email
+            Correo
             <input
               type="email"
               value={email}
@@ -41,10 +41,10 @@ export default function Login() {
           </label>
           {error && <div className="error-text">{error}</div>}
           <button className="button" type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
         </form>
-        <div className="auth-hint">Demo user: maria.vega@clinic.com</div>
+        <div className="auth-hint">Usuario demo: maria.vega@clinic.com</div>
       </div>
     </div>
   );
