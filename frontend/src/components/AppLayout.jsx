@@ -1,13 +1,14 @@
 import React from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import Header from "./Header.jsx";
-import { clearToken } from "../services/auth.js";
+import { clearHospitalId, clearToken } from "../services/auth.js";
 
 export default function AppLayout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     clearToken();
+    clearHospitalId();
     navigate("/login");
   };
 

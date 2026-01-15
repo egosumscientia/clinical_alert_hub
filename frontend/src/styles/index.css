@@ -115,6 +115,25 @@ body {
   font-size: 12px;
 }
 
+.filter-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.filter-select select {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 12px;
+}
+
 .content {
   padding: 28px;
   background: var(--bg-main);
@@ -240,6 +259,10 @@ body {
   align-items: center;
 }
 
+.alert-row.acknowledged {
+  opacity: 0.75;
+}
+
 .alert-reason {
   font-weight: 500;
   margin-bottom: 4px;
@@ -248,6 +271,89 @@ body {
 .alert-meta {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+.alert-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.alert-button.primary {
+  background: var(--status-critical);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.alert-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-size {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-size select {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: var(--bg-main);
+}
+
+.page-button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.page-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.page-status {
+  color: var(--text-main);
+  font-weight: 500;
 }
 
 .link {

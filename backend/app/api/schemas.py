@@ -34,10 +34,35 @@ class AlertOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class HospitalOut(BaseModel):
+    hospital_id: UUID
+    name: str
+    status: str
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class PageInfo(BaseModel):
+    total: int
+    limit: int
+    offset: int
+
+
+class PagedPatients(BaseModel):
+    items: List[PatientOut]
+    page: PageInfo
+
+
+class PagedAlerts(BaseModel):
+    items: List[AlertOut]
+    page: PageInfo
+
+
 class DashboardResponse(BaseModel):
     totals: dict
-    patients: List[PatientOut]
-    alerts: List[AlertOut]
+    patients: PagedPatients
+    alerts: PagedAlerts
 
 
 class MetricIngestRequest(BaseModel):

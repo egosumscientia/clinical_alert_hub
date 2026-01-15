@@ -1,7 +1,15 @@
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
-from app.models.entities import ClinicalMetric, Patient, PatientStatusHistory, Alert, AlertRecipient, User
+from app.models.entities import (
+    ClinicalMetric,
+    Patient,
+    PatientStatusHistory,
+    Alert,
+    AlertRecipient,
+    User,
+    UserHospital,
+)
 
 
 def evaluate_status(metric_type: str, metric_value: float) -> tuple[str, str]:
@@ -58,10 +66,15 @@ def ingest_metric(db: Session, patient: Patient, metric_type: str, metric_value:
             db.add(alert)
             db.flush()
 
-            recipients = db.query(User).filter(
-                User.hospital_id == patient.hospital_id,
-                User.is_active.is_(True),
-            ).all()
+            recipients = (
+                db.query(User)
+                .join(UserHospital, User.user_id == UserHospital.user_id)
+                .filter(
+                    UserHospital.hospital_id == patient.hospital_id,
+                    User.is_active.is_(True),
+                )
+                .all()
+            )
             delivered_at = datetime.now(timezone.utc)
             for user in recipients:
                 db.add(
